@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDX Stock Timeline — Interactive History</title>
+    <meta name="description" content="Interactive 5-year stock price timeline for any Indonesian Stock Exchange (IDX) listed company with annotated key events.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated topographical contour background -->
+    <div class="topo-bg">
+        <svg id="topoSvg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+
+    <!-- Floating particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Search Bar -->
+        <div class="search-section" id="searchSection">
+            <div class="search-box">
+                <div class="search-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </div>
+                <input type="text" id="tickerInput" placeholder="Enter IDX ticker (e.g. BBCA, TLKM, BUMI...)" autocomplete="off" spellcheck="false">
+                <button id="searchBtn" class="search-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="quick-picks">
+                <span class="quick-label">Popular:</span>
+                <button class="quick-btn" data-ticker="BUMI">BUMI</button>
+                <button class="quick-btn" data-ticker="BBCA">BBCA</button>
+                <button class="quick-btn" data-ticker="BBRI">BBRI</button>
+                <button class="quick-btn" data-ticker="TLKM">TLKM</button>
+                <button class="quick-btn" data-ticker="ASII">ASII</button>
+                <button class="quick-btn" data-ticker="BMRI">BMRI</button>
+                <button class="quick-btn" data-ticker="UNVR">UNVR</button>
+                <button class="quick-btn" data-ticker="GOTO">GOTO</button>
+            </div>
+        </div>
+
+        <!-- IDX Market Heatmap -->
+        <div class="heatmap-section" id="heatmapSection">
+            <div class="section-header">
+                <h2 class="section-title">IDX Market Heatmap</h2>
+                <span class="section-badge hm-live-badge">● Live</span>
+            </div>
+            <div class="heatmap-container" id="heatmapContainer">
+                <!-- Rendered by heatmap.js -->
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="header" id="header">
+            <div class="logo-group">
+                <div class="logo-icon" id="logoIcon">
+                    <img id="companyLogo" src="" alt="" style="display:none; width:52px; height:52px; border-radius:12px; object-fit:contain; background:rgba(255,255,255,0.08);">
+                    <svg id="fallbackLogo" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:var(--accent);stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:var(--accent-dark);stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="8" y="8" width="44" height="44" rx="10" fill="none" stroke="url(#logoGrad)" stroke-width="2" opacity="0.3"/>
+                        <rect x="14" y="14" width="32" height="32" rx="7" fill="none" stroke="url(#logoGrad)" stroke-width="2" opacity="0.6"/>
+                        <text x="30" y="37" text-anchor="middle" font-family="Outfit" font-weight="800" font-size="18" fill="url(#logoGrad)" id="logoText">IDX</text>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1 id="stockName">—</h1>
+                    <span class="ticker" id="tickerLabel">IDX:—</span>
+                </div>
+            </div>
+            <div class="header-info">
+                <div class="price-badge">
+                    <span class="price-label">Last Price</span>
+                    <span class="price-value" id="lastPrice">—</span>
+                </div>
+                <div class="period-badge">
+                    <span class="period-label">5Y Timeline</span>
+                    <span class="period-range" id="periodRange">—</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Loading State -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loader">
+                <div class="loader-ring"></div>
+                <div class="loader-text">Loading stock data...</div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display:none;">
+            <div class="error-icon">⚠️</div>
+            <div class="error-title" id="errorTitle">Unable to load stock data</div>
+            <div class="error-msg" id="errorMsg">Please check the ticker and try again.</div>
+        </div>
+
+        <!-- Chart Toggle Bar -->
+        <div class="chart-toggle-bar" id="chartToggleBar" style="display:none;">
+            <button class="chart-toggle-btn active" id="btnTimelineChart" data-view="timeline">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Timeline Chart
+            </button>
+            <button class="chart-toggle-btn" id="btnTradingviewChart" data-view="tradingview">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="4" height="13"/><rect x="10" y="3" width="4" height="18"/><rect x="17" y="11" width="4" height="10"/></svg>
+                TradingView Chart
+            </button>
+        </div>
+
+        <!-- Chart Container (Timeline) -->
+        <div class="chart-wrapper" id="chartWrapper" style="display:none;">
+            <div class="chart-glow"></div>
+            <canvas id="stockChart"></canvas>
+            <div class="annotations-layer" id="annotationsLayer"></div>
+            <!-- Zoom controls -->
+            <div class="zoom-controls" id="zoomControls">
+                <button class="zoom-btn" id="zoomInBtn" title="Zoom In">+</button>
+                <button class="zoom-btn" id="zoomOutBtn" title="Zoom Out">−</button>
+                <button class="zoom-btn zoom-reset" id="zoomResetBtn" title="Reset Zoom">↺</button>
+            </div>
+            <div class="chart-tooltip" id="chartTooltip">
+                <div class="tooltip-date" id="tooltipDate"></div>
+                <div class="tooltip-price" id="tooltipPrice"></div>
+                <div class="tooltip-change" id="tooltipChange"></div>
+            </div>
+            <div class="event-popup" id="eventPopup">
+                <div class="event-popup-arrow"></div>
+                <div class="event-popup-header">
+                    <span class="event-popup-icon" id="eventPopupIcon"></span>
+                    <span class="event-popup-category" id="eventPopupCategory"></span>
+                </div>
+                <div class="event-popup-date" id="eventPopupDate"></div>
+                <h3 class="event-popup-title" id="eventPopupTitle"></h3>
+                <p class="event-popup-desc" id="eventPopupDesc"></p>
+            </div>
+        </div>
+
+        <!-- TradingView Chart Container (hidden by default, shown via toggle) -->
+        <div class="tradingview-chart-wrapper" id="tradingviewChartWrapper" style="display:none;">
+            <div id="tradingview_widget"></div>
+        </div>
+
+        <!-- Legend (directly below chart) -->
+        <div class="legend" id="legend" style="display:none;">
+            <div class="legend-title">Event Types</div>
+            <div class="legend-items">
+                <div class="legend-item"><span class="legend-dot" style="background:#FFD740;"></span><span>Earnings</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#448AFF;"></span><span>Acquisition</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#FF5252;"></span><span>Milestone</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#E040FB;"></span><span>Dividend/Split</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#00E676;"></span><span>52W High/Low</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#FF6E40;"></span><span>Big Move</span></div>
+            </div>
+        </div>
+
+        <!-- Key Metrics (TradingView) -->
+        <div class="metrics-section" id="metricsSection" style="display:none;">
+            <div class="metrics-header">
+                <h2 class="metrics-title">Key Financials &amp; Metrics</h2>
+                <span class="tradingview-badge">Powered by TradingView</span>
+            </div>
+            <!-- Symbol Info: quick overview strip -->
+            <div class="tradingview-container tv-symbol-info" id="tvSymbolInfoContainer">
+                <!-- Widget injected by app.js -->
+            </div>
+            <!-- Full Financials -->
+            <div class="tradingview-container tv-financials" id="tvMetricsContainer" style="height: 830px;">
+                <!-- Widget injected by app.js -->
+            </div>
+        </div>
+
+        <!-- Broker Summary (TradingView Technical Analysis) -->
+        <div class="broker-section" id="brokerSection" style="display:none;">
+            <div class="section-header">
+                <h2 class="section-title">Broker &amp; Technical Summary</h2>
+                <span class="tradingview-badge">Powered by TradingView</span>
+            </div>
+            <div class="tradingview-container tv-broker" id="tvBrokerContainer" style="height: 425px;">
+                <!-- Widget injected by app.js -->
+            </div>
+        </div>
+
+        <!-- Company Documents -->
+        <div class="documents-section" id="documentsSection" style="display:none;">
+            <div class="section-header">
+                <h2 class="section-title">Company Documents &amp; Filings</h2>
+                <span class="section-badge">Multiple Sources</span>
+            </div>
+            <div class="docs-grid" id="docsGrid">
+                <!-- Cards injected by app.js -->
+            </div>
+        </div>
+
+    </div>
+
+    <script src="heatmap-data.js"></script>
+    <script src="heatmap.js"></script>
+    <script src="stock-data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
