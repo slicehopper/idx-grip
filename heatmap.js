@@ -1,5 +1,5 @@
-/* ================================================
-   IDX Market Heatmap — Treemap Renderer
+﻿/* ================================================
+   IDX Market Heatmap â€” Treemap Renderer
    Row-based treemap using absolute positioning
    ================================================ */
 
@@ -178,7 +178,7 @@ function buildTreemapLayout(container, sectors) {
                     const changeSpan = document.createElement('div');
                     changeSpan.className = 'hm-tile-change';
                     const sign = stock.changePercent >= 0 ? '+' : '';
-                    changeSpan.textContent = stock.price > 0 ? `${sign}${stock.changePercent.toFixed(2)}%` : '—';
+                    changeSpan.textContent = stock.price > 0 ? `${sign}${stock.changePercent.toFixed(2)}%` : 'â€”';
                     changeSpan.style.color = changeToTextColor(stock.changePercent);
                     const changeFontSize = Math.min(Math.max(sr.w / 8, 7), 12);
                     changeSpan.style.fontSize = changeFontSize + 'px';
@@ -224,7 +224,7 @@ function ensureTooltip() {
 function showHeatmapTooltip(e, stock, tile) {
     const tt = ensureTooltip();
     const sign = stock.changePercent >= 0 ? '+' : '';
-    const changeColor = stock.changePercent >= 0 ? '#00E676' : '#FF5252';
+    const changeColor = stock.changePercent >= 0 ? '#D5D98B' : '#BA8A8A';
 
     const mcapStr = stock.marketCap > 1e12
         ? (stock.marketCap / 1e12).toFixed(1) + 'T'
@@ -233,7 +233,7 @@ function showHeatmapTooltip(e, stock, tile) {
     tt.innerHTML = `
         <div class="hm-tt-ticker">${stock.ticker}</div>
         <div class="hm-tt-name">${stock.name}</div>
-        <div class="hm-tt-sector">${stock.sector} · ${stock.industry}</div>
+        <div class="hm-tt-sector">${stock.sector} Â· ${stock.industry}</div>
         ${stock.price > 0 ? `
             <div class="hm-tt-price">IDR ${stock.price.toLocaleString()}</div>
             <div class="hm-tt-change" style="color:${changeColor}">${sign}${stock.changePercent.toFixed(2)}% (${sign}${stock.change.toFixed(0)})</div>

@@ -1,6 +1,6 @@
-/* ================================================
-   IDX Stock Timeline — Global Styles
-   Brand: Green (#00E676/#00C853) + Dark Theme
+﻿/* ================================================
+   IDX Stock Timeline â€” Global Styles
+   Brand: Khaki/Sage (#D5D98B/#B5BA8A) + Navy Dark Theme + Dark Theme
    Inspired by topographical contour lines
    ================================================ */
 
@@ -11,28 +11,28 @@
 }
 
 :root {
-    --accent: #00E676;
-    --accent-dark: #00C853;
-    --accent-deep: #009624;
-    --accent-glow: rgba(0, 230, 118, 0.25);
-    --accent-subtle: rgba(0, 230, 118, 0.08);
+    --accent: #D5D98B;
+    --accent-dark: #B5BA8A;
+    --accent-deep: #9A9B7A;
+    --accent-glow: rgba(213, 217, 139, 0.25);
+    --accent-subtle: rgba(213, 217, 139, 0.08);
 
-    --color-earnings: #FFD740;
-    --color-acquisition: #448AFF;
-    --color-milestone: #FF5252;
-    --color-dividend: #E040FB;
-    --color-high-low: #00E676;
-    --color-big-move: #FF6E40;
+    --color-earnings: #D5D98B;
+    --color-acquisition: #8A9FBA;
+    --color-milestone: #BA8A8A;
+    --color-dividend: #B5BA8A;
+    --color-high-low: #D5D98B;
+    --color-big-move: #BA9B7A;
 
-    --bg-primary: #0a0f0d;
-    --bg-secondary: #111a16;
-    --bg-card: rgba(17, 26, 22, 0.85);
-    --bg-glass: rgba(17, 26, 22, 0.6);
-    --text-primary: #e8f5e9;
-    --text-secondary: #a5d6a7;
-    --text-muted: #4a7c5a;
-    --border-color: rgba(0, 230, 118, 0.12);
-    --border-glow: rgba(0, 230, 118, 0.3);
+    --bg-primary: #0C1621;
+    --bg-secondary: #111D2A;
+    --bg-card: rgba(17, 29, 42, 0.85);
+    --bg-glass: rgba(17, 29, 42, 0.6);
+    --text-primary: #E2E4D4;
+    --text-secondary: #B5BA8A;
+    --text-muted: #6B7255;
+    --border-color: rgba(213, 217, 139, 0.12);
+    --border-glow: rgba(213, 217, 139, 0.3);
 
     --font-display: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
@@ -488,20 +488,20 @@ body {
     right: 0;
     pointer-events: none;
     z-index: 30;
-    background: rgba(0, 230, 118, 0.15);
-    border: 1px solid rgba(0, 230, 118, 0.5);
+    background: rgba(213, 217, 139, 0.15);
+    border: 1px solid rgba(213, 217, 139, 0.5);
     border-radius: 6px;
     padding: 3px 12px 3px 10px;
     font-family: var(--font-display);
     font-size: 0.78rem;
     font-weight: 700;
-    color: #00E676;
+    color: #D5D98B;
     white-space: nowrap;
     opacity: 0;
     transition: opacity 0.12s ease, top 0.06s linear;
     transform: translateY(-50%);
     letter-spacing: 0.02em;
-    text-shadow: 0 0 8px rgba(0, 230, 118, 0.3);
+    text-shadow: 0 0 8px rgba(213, 217, 139, 0.3);
 }
 
 .y-axis-price-tag.visible {
@@ -516,12 +516,12 @@ body {
     transform: translateY(-50%) rotate(45deg);
     width: 8px;
     height: 8px;
-    background: rgba(0, 230, 118, 0.15);
-    border-left: 1px solid rgba(0, 230, 118, 0.5);
-    border-bottom: 1px solid rgba(0, 230, 118, 0.5);
+    background: rgba(213, 217, 139, 0.15);
+    border-left: 1px solid rgba(213, 217, 139, 0.5);
+    border-bottom: 1px solid rgba(213, 217, 139, 0.5);
 }
 
-/* Crosshair line drawn by canvas plugin — styles for overlay */
+/* Crosshair line drawn by canvas plugin â€” styles for overlay */
 .chart-crosshair-line {
     position: absolute;
     left: 0;
@@ -529,7 +529,7 @@ body {
     height: 1px;
     pointer-events: none;
     z-index: 4;
-    border-top: 1px dashed rgba(0, 230, 118, 0.25);
+    border-top: 1px dashed rgba(213, 217, 139, 0.25);
     opacity: 0;
     transition: opacity 0.12s ease, top 0.06s linear;
     transform: translateY(-0.5px);
@@ -549,7 +549,7 @@ body {
     font-size: 1.2rem; font-weight: 700; color: var(--accent);
 }
 .tooltip-change { font-size: 0.75rem; font-weight: 500; margin-top: 2px; }
-.tooltip-change.positive { color: #00E676; }
+.tooltip-change.positive { color: #D5D98B; }
 .tooltip-change.negative { color: #FF5252; }
 
 /* ---- Event Popup ---- */
@@ -734,7 +734,7 @@ body {
 }
 
 .doc-card.doc-pdf {
-    border-color: rgba(0, 230, 118, 0.2);
+    border-color: rgba(213, 217, 139, 0.2);
 }
 
 .doc-card.doc-pdf .doc-card-link {
@@ -786,9 +786,9 @@ body {
 }
 
 .hm-live-badge {
-    color: #00E676 !important;
-    background: rgba(0, 230, 118, 0.1) !important;
-    border-color: rgba(0, 230, 118, 0.25) !important;
+    color: #D5D98B !important;
+    background: rgba(213, 217, 139, 0.1) !important;
+    border-color: rgba(213, 217, 139, 0.25) !important;
     animation: livePulse 2s ease-in-out infinite;
 }
 

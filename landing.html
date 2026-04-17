@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDX Grip — Data-Driven IDX Stock Intelligence</title>
+    <meta name="description" content="Real-time Indonesian stock market analytics. Timeline charts, market heatmaps, and multi-factor equity screening for IDX investors.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ========================================
+           OFFMENU-INSPIRED IDX GRIP LANDING PAGE
+           Light monochrome · Bold geometric · Minimal
+           ======================================== */
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0C1621;
+            --bg-alt: #111D2A;
+            --text: #E2E4D4;
+            --text-muted: #6B7255;
+            --text-light: #9A9B7A;
+            --black: #D5D98B;
+            --white: #0C1621;
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+            --radius-xl: 40px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ---- FIXED NAVBAR ---- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+            background: transparent;
+            transition: background 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(12, 22, 33, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .nav-wordmark {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            color: var(--text);
+            user-select: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-dot:hover { transform: scale(1.3); }
+
+        .nav-grid-btn {
+            display: grid;
+            grid-template-columns: repeat(3, 5px);
+            gap: 3px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .nav-grid-btn span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--text);
+            transition: background 0.2s ease;
+        }
+
+        .nav-grid-btn:hover span { background: var(--text-muted); }
+
+        /* ---- HERO SECTION ---- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-tagline {
+            position: absolute;
+            text-align: center;
+            max-width: 520px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hero-tagline p {
+            font-size: clamp(0.88rem, 1.4vw, 1.05rem);
+            font-weight: 400;
+            color: var(--text);
+            line-height: 1.6;
+            letter-spacing: -0.01em;
+        }
+
+        /* Orbiting project circles */
+        .orbit-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .orbit-item {
+            position: absolute;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+            will-change: transform;
+        }
+
+        .orbit-item:hover {
+            transform: scale(1.08) !important;
+            box-shadow: 0 20px 60px rgba(213, 217, 139, 0.12);
+        }
+
+        .orbit-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ---- SERVICES SECTION ---- */
+        .services {
+            padding: 120px 40px 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        .services-left-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 24px;
+        }
+
+        .services-headline {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            color: var(--text);
+        }
+
+        .services-right-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 24px;
+        }
+
+        .services-list {
+            list-style: none;
+        }
+
+        .services-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(213, 217, 139, 0.1);
+            cursor: pointer;
+            transition: padding-left 0.3s ease, color 0.2s ease;
+        }
+
+        .services-list li:hover {
+            padding-left: 12px;
+            color: var(--text-muted);
+        }
+
+        .services-list li:first-child {
+            border-top: 1px solid rgba(213, 217, 139, 0.1);
+        }
+
+        .service-name {
+            font-size: clamp(1rem, 1.8vw, 1.35rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .service-num {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-light);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ---- WORK SECTION ---- */
+        .work {
+            padding: 40px 40px 120px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .work-card {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            aspect-ratio: 16/10;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .work-card:hover { transform: scale(0.98); }
+
+        .work-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .work-card:hover img { transform: scale(1.05); }
+
+        .work-card-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-top: 14px;
+            letter-spacing: -0.01em;
+        }
+
+        /* ---- CTA SECTION ---- */
+        .cta-section {
+            padding: 140px 40px;
+            text-align: center;
+        }
+
+        .cta-headline {
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            color: var(--text);
+            margin-bottom: 32px;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--black);
+            color: var(--white);
+            padding: 16px 36px;
+            border-radius: 100px;
+            font-family: var(--font);
+            font-size: 0.92rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            border: none;
+            cursor: pointer;
+            transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background: #B5BA8A;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(213, 217, 139, 0.2);
+        }
+
+        /* ---- FOOTER ---- */
+        .footer {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(213, 217, 139, 0.1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 40px;
+            padding: 40px 0;
+        }
+
+        .footer-col-title {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text);
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover { color: var(--text-muted); }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 24px;
+            border-top: 1px solid rgba(213, 217, 139, 0.06);
+        }
+
+        .footer-copy {
+            font-size: 0.72rem;
+            color: var(--text-light);
+        }
+
+        /* ---- FLOATING CTA PILL ---- */
+        .floating-cta {
+            position: fixed;
+            bottom: 28px;
+            left: 28px;
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 22px 12px 14px;
+            border-radius: 100px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            letter-spacing: -0.01em;
+        }
+
+        .floating-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(213, 217, 139, 0.25);
+        }
+
+        .floating-cta-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        /* ---- SCROLL REVEAL ---- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 900px) {
+            .services-grid { grid-template-columns: 1fr; gap: 48px; }
+            .work-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+            .navbar { padding: 16px 20px; }
+            .services, .work { padding-left: 20px; padding-right: 20px; }
+            .cta-section { padding: 80px 20px; }
+        }
+
+        @media (max-width: 600px) {
+            .hero-tagline p { font-size: 0.85rem; }
+            .orbit-item { transform: scale(0.7) !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-wordmark">IDX/G</a>
+        <div class="nav-actions">
+            <div class="nav-dot" id="themeToggle"></div>
+            <a href="index.html" class="nav-grid-btn" aria-label="Dashboard">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="hero">
+        <div class="hero-tagline">
+            <p>Data-driven Indonesian stock<br>market intelligence platform<br>for serious retail investors</p>
+        </div>
+
+        <div class="orbit-container" id="orbitContainer">
+            <!-- JS populates orbiting circles -->
+        </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section class="services reveal">
+        <div class="services-grid">
+            <div>
+                <div class="services-left-label">Platform</div>
+                <h2 class="services-headline">Research first.<br>Trade informed.</h2>
+            </div>
+            <div>
+                <div class="services-right-label">Tools</div>
+                <ul class="services-list">
+                    <li>
+                        <span class="service-name">Real-Time Stock Timeline</span>
+                        <span class="service-num">01</span>
+                    </li>
+                    <li>
+                        <span class="service-name">IDX Market Heatmap</span>
+                        <span class="service-num">02</span>
+                    </li>
+                    <li>
+                        <span class="service-name">Multi-Factor Screener</span>
+                        <span class="service-num">03</span>
+                    </li>
+                    <li>
+                        <span class="service-name">Sector Analysis</span>
+                        <span class="service-num">04</span>
+                    </li>
+                    <li>
+                        <span class="service-name">Event Detection Engine</span>
+                        <span class="service-num">05</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WORK GRID ===== -->
+    <section class="work">
+        <div class="work-grid">
+            <div class="reveal">
+                <a href="index.html" class="work-card">
+                    <img src="images/project-1.png" alt="Stock Timeline Dashboard" loading="lazy">
+                </a>
+                <div class="work-card-label">Stock Timeline</div>
+            </div>
+            <div class="reveal">
+                <a href="index.html" class="work-card">
+                    <img src="images/project-2.png" alt="Market Heatmap View" loading="lazy">
+                </a>
+                <div class="work-card-label">Market Heatmap</div>
+            </div>
+            <div class="reveal">
+                <a href="screener.html" class="work-card">
+                    <img src="images/project-3.png" alt="Equity Screener Interface" loading="lazy">
+                </a>
+                <div class="work-card-label">Equity Screener</div>
+            </div>
+            <div class="reveal">
+                <a href="index.html" class="work-card">
+                    <img src="images/project-4.png" alt="Mobile Analytics" loading="lazy">
+                </a>
+                <div class="work-card-label">Mobile Analytics</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="cta-section reveal">
+        <h2 class="cta-headline">Let's find alpha.</h2>
+        <a href="index.html" class="cta-btn">
+            Open Dashboard
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-col-title">Platform</div>
+                <ul class="footer-links">
+                    <li><a href="index.html">Stock Timeline</a></li>
+                    <li><a href="index.html">Market Heatmap</a></li>
+                    <li><a href="screener.html">Equity Screener</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-col-title">Data</div>
+                <ul class="footer-links">
+                    <li><a href="#">Yahoo Finance API</a></li>
+                    <li><a href="#">IDX Composite</a></li>
+                    <li><a href="#">Sector Breakdown</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-col-title">About</div>
+                <ul class="footer-links">
+                    <li><a href="#">Open Source</a></li>
+                    <li><a href="#">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span class="footer-copy">© 2026 IDX Grip. Built for informed investors.</span>
+            <span class="footer-copy">Powered by Yahoo Finance</span>
+        </div>
+    </footer>
+
+    <!-- ===== FLOATING CTA ===== -->
+    <a href="index.html" class="floating-cta">
+        <span class="floating-cta-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg></span>
+        Open Dashboard
+    </a>
+
+    <script>
+        /* ================================================
+           LANDING PAGE — JS CONTROLLER
+           ================================================ */
+
+        // ---- Orbit Configuration ----
+        const PROJECTS = [
+            { img: 'images/project-1.png', label: 'Stock Timeline', href: 'index.html', size: 140 },
+            { img: 'images/project-2.png', label: 'Market Heatmap', href: 'index.html', size: 120 },
+            { img: 'images/project-3.png', label: 'Equity Screener', href: 'screener.html', size: 110 },
+            { img: 'images/project-4.png', label: 'Mobile Analytics', href: 'index.html', size: 100 },
+            { img: 'images/project-1.png', label: 'Portfolio View', href: 'index.html', size: 90 },
+            { img: 'images/project-2.png', label: 'Sector View', href: 'index.html', size: 85 },
+            { img: 'images/project-3.png', label: 'Factor Model', href: 'screener.html', size: 95 },
+            { img: 'images/project-4.png', label: 'Alert System', href: 'index.html', size: 105 },
+        ];
+
+        const container = document.getElementById('orbitContainer');
+        const orbits = [];
+        let scrollAngle = 0;
+
+        function createOrbits() {
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight / 2;
+            const radiusX = Math.min(window.innerWidth * 0.35, 450);
+            const radiusY = Math.min(window.innerHeight * 0.32, 320);
+
+            container.innerHTML = '';
+            orbits.length = 0;
+
+            PROJECTS.forEach((proj, i) => {
+                const el = document.createElement('a');
+                el.className = 'orbit-item';
+                el.href = proj.href;
+                el.style.width = proj.size + 'px';
+                el.style.height = proj.size + 'px';
+                el.innerHTML = `<img src="${proj.img}" alt="${proj.label}">`;
+                container.appendChild(el);
+
+                orbits.push({
+                    el,
+                    baseAngle: (i / PROJECTS.length) * Math.PI * 2,
+                    rx: radiusX + (i % 2 === 0 ? 0 : 40),
+                    ry: radiusY + (i % 2 === 0 ? 20 : -20),
+                    size: proj.size,
+                });
+            });
+        }
+
+        function positionOrbits() {
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight / 2;
+
+            orbits.forEach(o => {
+                const angle = o.baseAngle + scrollAngle;
+                const x = cx + Math.cos(angle) * o.rx - o.size / 2;
+                const y = cy + Math.sin(angle) * o.ry - o.size / 2;
+                o.el.style.left = x + 'px';
+                o.el.style.top = y + 'px';
+            });
+        }
+
+        // Scroll-driven rotation
+        let lastScrollY = 0;
+        let rafId = null;
+
+        function onScroll() {
+            const hero = document.getElementById('hero');
+            const heroBottom = hero.offsetTop + hero.offsetHeight;
+            const scrollY = window.pageYOffset;
+
+            // Only rotate while hero is visible
+            if (scrollY < heroBottom) {
+                scrollAngle = scrollY * 0.003;
+            }
+
+            // Navbar background
+            document.getElementById('navbar').classList.toggle('scrolled', scrollY > 60);
+
+            positionOrbits();
+        }
+
+        // ---- Scroll Reveal ----
+        function initReveal() {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        e.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // ---- Service List Hover ----
+        function initServices() {
+            document.querySelectorAll('.services-list li').forEach(li => {
+                li.addEventListener('mouseenter', () => {
+                    document.querySelectorAll('.services-list li').forEach(other => {
+                        if (other !== li) other.style.opacity = '0.4';
+                    });
+                });
+                li.addEventListener('mouseleave', () => {
+                    document.querySelectorAll('.services-list li').forEach(other => {
+                        other.style.opacity = '1';
+                    });
+                });
+            });
+        }
+
+        // ---- Init ----
+        window.addEventListener('DOMContentLoaded', () => {
+            createOrbits();
+            positionOrbits();
+            initReveal();
+            initServices();
+        });
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', () => {
+            createOrbits();
+            positionOrbits();
+        });
+    </script>
+</body>
+</html>

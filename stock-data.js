@@ -1,4 +1,4 @@
-/* ================================================
+﻿/* ================================================
    Stock Data Module
    - Yahoo Finance API fetching via CORS proxy
    - BUMI hardcoded events (special case)
@@ -124,7 +124,7 @@ function generateAutoEvents(stockInfo) {
                 events.push({
                     date: current.date,
                     category: 'high_low',
-                    icon: '📈',
+                    icon: '↗',
                     title: `52-Week High: IDR ${current.high.toLocaleString()}`,
                     description: `${ticker} reached a new 52-week high of IDR ${current.high.toLocaleString()}, surpassing the previous high in the trailing 52-week period.`
                 });
@@ -141,7 +141,7 @@ function generateAutoEvents(stockInfo) {
                 events.push({
                     date: current.date,
                     category: 'high_low',
-                    icon: '📉',
+                    icon: '↘',
                     title: `52-Week Low: IDR ${current.low.toLocaleString()}`,
                     description: `${ticker} hit a new 52-week low of IDR ${current.low.toLocaleString()}, the lowest point in the trailing 52-week period.`
                 });
@@ -158,7 +158,7 @@ function generateAutoEvents(stockInfo) {
 
         if (Math.abs(pctChange) >= 15) {
             const direction = pctChange > 0 ? 'surged' : 'dropped';
-            const emoji = pctChange > 0 ? '🚀' : '💥';
+            const emoji = pctChange > 0 ? '↗' : '↘';
             events.push({
                 date: priceData[i].date,
                 category: 'big_move',
@@ -175,7 +175,7 @@ function generateAutoEvents(stockInfo) {
         events.push({
             date,
             category: 'dividend',
-            icon: '💰',
+            icon: '◇',
             title: `Dividend: IDR ${div.amount.toFixed(2)}/share`,
             description: `${ticker} distributed a cash dividend of IDR ${div.amount.toFixed(2)} per share on this date.`
         });
@@ -187,7 +187,7 @@ function generateAutoEvents(stockInfo) {
         events.push({
             date,
             category: 'dividend',
-            icon: '✂️',
+            icon: '÷',
             title: `Stock Split: ${split.numerator}:${split.denominator}`,
             description: `${ticker} executed a ${split.numerator}-for-${split.denominator} stock split, adjusting the share price and outstanding share count accordingly.`
         });
@@ -207,7 +207,7 @@ function generateAutoEvents(stockInfo) {
             events.push({
                 date: earningsDate,
                 category: 'earnings',
-                icon: '📊',
+                icon: '◆',
                 title: `FY${year - 1} Annual Results (Est.)`,
                 description: `Estimated date for ${ticker}'s FY${year - 1} full-year earnings announcement. IDX-listed companies typically release annual results in March-April.`
             });
@@ -239,24 +239,24 @@ function generateAutoEvents(stockInfo) {
 // BUMI-SPECIFIC HARDCODED EVENTS
 // =============================================
 const BUMI_EVENTS = [
-    { date: '2021-06-15', category: 'earnings', icon: '📊', title: 'FY2020 Results Announced', description: 'BUMI reported a net loss of IDR 4.77 trillion for FY2020. Recovery trajectory began as coal prices started rising globally.' },
-    { date: '2021-09-20', category: 'high_low', icon: '⛏️', title: 'Coal Prices Surge', description: 'Global coal benchmarks surged past $150/ton amid energy crises. Realized coal prices for FY2021 reached $67.4/ton, driving BUMI to record revenues of $5.4 billion.' },
-    { date: '2022-03-15', category: 'earnings', icon: '📊', title: 'FY2021 Results: Record Profit', description: 'Net profit of IDR 2.40 trillion, a turnaround from IDR 4.77T loss. EPS Rp 32.27. Revenue reached a record $5.4 billion.' },
-    { date: '2022-04-20', category: 'high_low', icon: '📈', title: 'Coal Prices at All-Time High', description: 'Realized coal prices surged 80% YoY to $121/ton for FY2022, driven by the Russia-Ukraine conflict and global energy shortages.' },
-    { date: '2022-07-12', category: 'milestone', icon: '🏆', title: 'Energy Risk Asia Award', description: 'Corporate Risk Manager of The Year at Energy Risk Asia Awards 2022, alongside the Highest ESG Rating from Refinitiv.' },
-    { date: '2022-10-05', category: 'milestone', icon: '💰', title: 'PKPU Debt Fully Repaid', description: 'Completed repayment of all PKPU (debt restructuring) obligations, eliminating significant future interest expenses.' },
-    { date: '2022-11-15', category: 'big_move', icon: '🤝', title: 'Salim Group Becomes Co-Controller', description: 'Through a $1.6B Non-Preemptive Share Issue and debt conversions, the Salim Group became a joint controlling shareholder alongside Bakrie.' },
-    { date: '2023-03-28', category: 'earnings', icon: '📊', title: 'FY2022 Results: Record Revenue', description: 'Gross revenue $1.83B. Net profit IDR 8.26T (EPS Rp 22.25). Coal sales declined 12% to 69.4 MT due to La Nina.' },
-    { date: '2023-07-15', category: 'acquisition', icon: '🔑', title: 'Jubilee Metals Acquisition', description: 'Acquired 64.98% of Jubilee Metals Limited (JML) for AUD 31.5 million — key step in metals diversification.' },
-    { date: '2024-03-28', category: 'earnings', icon: '📊', title: 'FY2023 Results: Profit Declines', description: 'Net profit fell to IDR 168.4B as coal prices dropped 33% to $81.3/ton. Coal sales +13% to 78.7 MT.' },
-    { date: '2024-06-20', category: 'milestone', icon: '📋', title: 'Quasi-Reorganization Plan', description: 'Announced quasi-reorganization to eliminate US$2.35B accumulated deficit — aiming for healthier balance sheet.' },
-    { date: '2024-12-11', category: 'milestone', icon: '📄', title: 'Convertible Bond Conversion', description: 'Completed conversion of mandatory convertible bonds (OWK BUMI) by issuing 13M+ new shares.' },
-    { date: '2025-01-15', category: 'acquisition', icon: '🔑', title: 'Wolfram Limited Acquisition', description: 'Signed agreement to acquire ~65% of Wolfram Limited, an Australian copper and gold mining company.' },
-    { date: '2025-03-28', category: 'earnings', icon: '📊', title: 'FY2024: Profit Surges 518%', description: 'Net profit jumped 517.8% to $67.48M despite revenue declining 19% to $1.36B. Coal production: 74.7 MT.' },
-    { date: '2025-05-12', category: 'milestone', icon: '🌿', title: 'ESG & CSR Awards', description: 'Best Corporate Emission Reduction Transparency Award and Indonesia CSR Award for sustainability.' },
-    { date: '2025-06-15', category: 'acquisition', icon: '🔑', title: 'Laman Mining Partnership', description: 'Partnership with PT Laman Mining in West Kalimantan, aiming for up to 45% for bauxite exploration.' },
-    { date: '2025-11-10', category: 'big_move', icon: '📌', title: 'Added to LQ45 & IDX80', description: 'Included in LQ45, IDX80, BISNIS-27, and Kompas-100 indices — reflecting improved liquidity.' },
-    { date: '2025-12-18', category: 'acquisition', icon: '✅', title: 'Jubilee Metals Completed', description: 'Finalized 64.98% stake in Jubilee Metals Limited, completing the multi-year acquisition.' },
-    { date: '2026-01-06', category: 'high_low', icon: '🚀', title: '52-Week High: IDR 484', description: 'Stock reached IDR 484, driven by metals diversification strategy and strong coal fundamentals.' },
-    { date: '2026-03-10', category: 'big_move', icon: '✨', title: 'New Corporate Logo', description: 'Unveiled new logo with topographical contour lines, symbolizing renewal and sustainability.' },
+    { date: '2021-06-15', category: 'earnings', icon: '◆', title: 'FY2020 Results Announced', description: 'BUMI reported a net loss of IDR 4.77 trillion for FY2020. Recovery trajectory began as coal prices started rising globally.' },
+    { date: '2021-09-20', category: 'high_low', icon: '↗', title: 'Coal Prices Surge', description: 'Global coal benchmarks surged past $150/ton amid energy crises. Realized coal prices for FY2021 reached $67.4/ton, driving BUMI to record revenues of $5.4 billion.' },
+    { date: '2022-03-15', category: 'earnings', icon: '◆', title: 'FY2021 Results: Record Profit', description: 'Net profit of IDR 2.40 trillion, a turnaround from IDR 4.77T loss. EPS Rp 32.27. Revenue reached a record $5.4 billion.' },
+    { date: '2022-04-20', category: 'high_low', icon: '↗', title: 'Coal Prices at All-Time High', description: 'Realized coal prices surged 80% YoY to $121/ton for FY2022, driven by the Russia-Ukraine conflict and global energy shortages.' },
+    { date: '2022-07-12', category: 'milestone', icon: '★', title: 'Energy Risk Asia Award', description: 'Corporate Risk Manager of The Year at Energy Risk Asia Awards 2022, alongside the Highest ESG Rating from Refinitiv.' },
+    { date: '2022-10-05', category: 'milestone', icon: '◇', title: 'PKPU Debt Fully Repaid', description: 'Completed repayment of all PKPU (debt restructuring) obligations, eliminating significant future interest expenses.' },
+    { date: '2022-11-15', category: 'big_move', icon: '⬡', title: 'Salim Group Becomes Co-Controller', description: 'Through a $1.6B Non-Preemptive Share Issue and debt conversions, the Salim Group became a joint controlling shareholder alongside Bakrie.' },
+    { date: '2023-03-28', category: 'earnings', icon: '◆', title: 'FY2022 Results: Record Revenue', description: 'Gross revenue $1.83B. Net profit IDR 8.26T (EPS Rp 22.25). Coal sales declined 12% to 69.4 MT due to La Nina.' },
+    { date: '2023-07-15', category: 'acquisition', icon: '⬢', title: 'Jubilee Metals Acquisition', description: 'Acquired 64.98% of Jubilee Metals Limited (JML) for AUD 31.5 million — key step in metals diversification.' },
+    { date: '2024-03-28', category: 'earnings', icon: '◆', title: 'FY2023 Results: Profit Declines', description: 'Net profit fell to IDR 168.4B as coal prices dropped 33% to $81.3/ton. Coal sales +13% to 78.7 MT.' },
+    { date: '2024-06-20', category: 'milestone', icon: '▫', title: 'Quasi-Reorganization Plan', description: 'Announced quasi-reorganization to eliminate US$2.35B accumulated deficit — aiming for healthier balance sheet.' },
+    { date: '2024-12-11', category: 'milestone', icon: '▪', title: 'Convertible Bond Conversion', description: 'Completed conversion of mandatory convertible bonds (OWK BUMI) by issuing 13M+ new shares.' },
+    { date: '2025-01-15', category: 'acquisition', icon: '⬢', title: 'Wolfram Limited Acquisition', description: 'Signed agreement to acquire ~65% of Wolfram Limited, an Australian copper and gold mining company.' },
+    { date: '2025-03-28', category: 'earnings', icon: '◆', title: 'FY2024: Profit Surges 518%', description: 'Net profit jumped 517.8% to $67.48M despite revenue declining 19% to $1.36B. Coal production: 74.7 MT.' },
+    { date: '2025-05-12', category: 'milestone', icon: '○', title: 'ESG & CSR Awards', description: 'Best Corporate Emission Reduction Transparency Award and Indonesia CSR Award for sustainability.' },
+    { date: '2025-06-15', category: 'acquisition', icon: '⬢', title: 'Laman Mining Partnership', description: 'Partnership with PT Laman Mining in West Kalimantan, aiming for up to 45% for bauxite exploration.' },
+    { date: '2025-11-10', category: 'big_move', icon: '▸', title: 'Added to LQ45 & IDX80', description: 'Included in LQ45, IDX80, BISNIS-27, and Kompas-100 indices — reflecting improved liquidity.' },
+    { date: '2025-12-18', category: 'acquisition', icon: '✓', title: 'Jubilee Metals Completed', description: 'Finalized 64.98% stake in Jubilee Metals Limited, completing the multi-year acquisition.' },
+    { date: '2026-01-06', category: 'high_low', icon: '↗', title: '52-Week High: IDR 484', description: 'Stock reached IDR 484, driven by metals diversification strategy and strong coal fundamentals.' },
+    { date: '2026-03-10', category: 'big_move', icon: '◆', title: 'New Corporate Logo', description: 'Unveiled new logo with topographical contour lines, symbolizing renewal and sustainability.' },
 ];

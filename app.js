@@ -1,5 +1,5 @@
-/* ================================================
-   IDX Stock Timeline — Application Logic
+﻿/* ================================================
+   IDX Stock Timeline â€” Application Logic
    Dynamically loads any IDX stock
    ================================================ */
 
@@ -18,7 +18,7 @@ const categoryColors = {
     acquisition: '#448AFF',
     milestone: '#FF5252',
     dividend: '#E040FB',
-    high_low: '#00E676',
+    high_low: '#D5D98B',
     big_move: '#FF6E40',
 };
 
@@ -89,7 +89,7 @@ function generateTopography() {
             d += ` L ${x} ${y}`;
         }
         const opacity = 0.15 + Math.random() * 0.35;
-        paths += `<path d="${d}" fill="none" stroke="var(--accent, #00E676)" stroke-width="1" opacity="${opacity}"/>`;
+        paths += `<path d="${d}" fill="none" stroke="var(--accent, #D5D98B)" stroke-width="1" opacity="${opacity}"/>`;
     }
     svg.innerHTML = paths;
 }
@@ -213,7 +213,7 @@ function updateHeader(stockInfo, priceData) {
 
     const startDate = new Date(first.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
     const endDate = new Date(last.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-    document.getElementById('periodRange').textContent = `${startDate} — ${endDate}`;
+    document.getElementById('periodRange').textContent = `${startDate} â€” ${endDate}`;
 
     // Update company logo
     updateCompanyLogo(stockInfo.ticker);
@@ -225,7 +225,7 @@ function updateHeader(stockInfo, priceData) {
     header.style.animation = '';
 
     // Update page title
-    document.title = `IDX:${stockInfo.ticker} — ${stockInfo.name} Stock Timeline`;
+    document.title = `IDX:${stockInfo.ticker} â€” ${stockInfo.name} Stock Timeline`;
 }
 
 // =============================================
@@ -250,7 +250,7 @@ async function loadStock(ticker) {
         const stockInfo = await fetchStockData(ticker);
         currentStock = stockInfo;
 
-        // Get events — BUMI gets curated events, others get auto-generated
+        // Get events â€” BUMI gets curated events, others get auto-generated
         if (ticker === 'BUMI') {
             currentEvents = BUMI_EVENTS;
         } else {
@@ -297,9 +297,9 @@ function buildChart(priceData) {
     // Gradient fill
     const canvasHeight = ctx.canvas.clientHeight || 400;
     const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
-    gradient.addColorStop(0, 'rgba(0, 230, 118, 0.25)');
-    gradient.addColorStop(0.5, 'rgba(0, 230, 118, 0.06)');
-    gradient.addColorStop(1, 'rgba(0, 230, 118, 0)');
+    gradient.addColorStop(0, 'rgba(213, 217, 139, 0.25)');
+    gradient.addColorStop(0.5, 'rgba(213, 217, 139, 0.06)');
+    gradient.addColorStop(1, 'rgba(213, 217, 139, 0)');
 
     // Create crosshair line element if not already present
     const wrapper = document.getElementById('chartWrapper');
@@ -318,14 +318,14 @@ function buildChart(priceData) {
             datasets: [{
                 label: 'IDR',
                 data: prices,
-                borderColor: '#00E676',
+                borderColor: '#D5D98B',
                 borderWidth: 2.5,
                 backgroundColor: gradient,
                 fill: true,
                 tension: 0.3,
                 pointRadius: 0,
                 pointHoverRadius: 6,
-                pointHoverBackgroundColor: '#00E676',
+                pointHoverBackgroundColor: '#D5D98B',
                 pointHoverBorderColor: '#0a0f0d',
                 pointHoverBorderWidth: 3,
             }]
@@ -701,18 +701,18 @@ function initTradingView(ticker) {
         width: '100%',
         height: 500,
         backgroundColor: 'rgba(10, 15, 13, 1)',
-        gridColor: 'rgba(0, 230, 118, 0.05)',
+        gridColor: 'rgba(213, 217, 139, 0.05)',
         studies: ['MASimple@tv-basicstudies'],
         overrides: {
-            'mainSeriesProperties.candleStyle.upColor': '#00E676',
+            'mainSeriesProperties.candleStyle.upColor': '#D5D98B',
             'mainSeriesProperties.candleStyle.downColor': '#FF5252',
-            'mainSeriesProperties.candleStyle.borderUpColor': '#00E676',
+            'mainSeriesProperties.candleStyle.borderUpColor': '#D5D98B',
             'mainSeriesProperties.candleStyle.borderDownColor': '#FF5252',
-            'mainSeriesProperties.candleStyle.wickUpColor': '#00E676',
+            'mainSeriesProperties.candleStyle.wickUpColor': '#D5D98B',
             'mainSeriesProperties.candleStyle.wickDownColor': '#FF5252',
             'paneProperties.background': '#0a0f0d',
-            'paneProperties.vertGridProperties.color': 'rgba(0, 230, 118, 0.05)',
-            'paneProperties.horzGridProperties.color': 'rgba(0, 230, 118, 0.05)',
+            'paneProperties.vertGridProperties.color': 'rgba(213, 217, 139, 0.05)',
+            'paneProperties.horzGridProperties.color': 'rgba(213, 217, 139, 0.05)',
         },
     });
 }
@@ -761,7 +761,7 @@ function updateDocuments(ticker) {
 
     const cards = [
         {
-            icon: '📊',
+            icon: '◆',
             type: 'Annual Report (PDF)',
             desc: `Find and download ${t}'s latest annual report PDF directly from search results.`,
             url: googlePdf(`"${t}" annual report ${new Date().getFullYear()} OR ${new Date().getFullYear() - 1} filetype:pdf`),
@@ -769,15 +769,15 @@ function updateDocuments(ticker) {
             isPdf: true,
         },
         {
-            icon: '📑',
+            icon: '▪',
             type: 'Financial Statements (PDF)',
-            desc: `Quarterly and annual financial statements — balance sheet, income statement, and cash flow.`,
+            desc: `Quarterly and annual financial statements - balance sheet, income statement, and cash flow.`,
             url: googlePdf(`"${t}" laporan keuangan financial statement ${new Date().getFullYear()} filetype:pdf`),
             source: 'Find PDF',
             isPdf: true,
         },
         {
-            icon: '📋',
+            icon: '▫',
             type: 'Prospectus (PDF)',
             desc: `IPO prospectus, rights issue documents, and material disclosures.`,
             url: googlePdf(`"${t}" prospectus IDX filetype:pdf`),
@@ -785,21 +785,21 @@ function updateDocuments(ticker) {
             isPdf: true,
         },
         {
-            icon: '🏛️',
+            icon: '⬡',
             type: 'IDX Filings',
             desc: `Official annual reports and financial statements filed on the Indonesia Stock Exchange.`,
             url: `https://www.idx.co.id/en/listed-companies/financial-statements-annual-report/`,
             source: 'IDX Official',
         },
         {
-            icon: '📈',
+            icon: '↗',
             type: 'RTI Business Profile',
             desc: `Company overview, financial ratios, and shareholder information.`,
             url: `https://www.rti.co.id/company/${t}`,
             source: 'RTI Business',
         },
         {
-            icon: '💬',
+            icon: '○',
             type: 'Stockbit Analysis',
             desc: `Community discussions, analyst opinions, and stock screener.`,
             url: `https://stockbit.com/symbol/${t}`,

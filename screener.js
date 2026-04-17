@@ -1,5 +1,5 @@
-/* ================================================
-   Multi-Factor Equity Screener — UI Controller
+﻿/* ================================================
+   Multi-Factor Equity Screener â€” UI Controller
    ================================================ */
 
 // =============================================
@@ -32,7 +32,7 @@ function generateTopography() {
             d += ` L ${x} ${y}`;
         }
         const opacity = 0.15 + Math.random() * 0.35;
-        paths += `<path d="${d}" fill="none" stroke="var(--accent, #00E676)" stroke-width="1" opacity="${opacity}"/>`;
+        paths += `<path d="${d}" fill="none" stroke="var(--accent, #D5D98B)" stroke-width="1" opacity="${opacity}"/>`;
     }
     svg.innerHTML = paths;
 }
@@ -55,7 +55,7 @@ function createParticles() {
 }
 
 // =============================================
-// SCORE → COLOR
+// SCORE â†’ COLOR
 // =============================================
 function scoreToColor(score, alpha = 1) {
     if (score == null) return `rgba(74, 124, 90, ${alpha * 0.3})`;
@@ -84,7 +84,7 @@ function scoreToTextColor(score) {
 // FORMAT HELPERS
 // =============================================
 function formatRaw(key, value) {
-    if (value == null) return '—';
+    if (value == null) return 'â€”';
     switch (key) {
         case 'pe': return value.toFixed(1) + 'x';
         case 'pb': return value.toFixed(2) + 'x';
@@ -165,16 +165,16 @@ function renderTable() {
                 <td class="col-name">${stock.name}</td>
                 <td class="col-sector">${stock.sector}</td>
                 <td class="score-cell">
-                    <span class="score-badge" style="background:${scoreToColor(cScore, 0.85)};color:${scoreToTextColor(cScore)}">${cScore != null ? cScore : '—'}</span>
+                    <span class="score-badge" style="background:${scoreToColor(cScore, 0.85)};color:${scoreToTextColor(cScore)}">${cScore != null ? cScore : 'â€”'}</span>
                 </td>
                 <td class="score-cell">
-                    <span class="score-badge" style="background:${scoreToColor(vScore, 0.6)};color:${scoreToTextColor(vScore)}">${vScore != null ? vScore : '—'}</span>
+                    <span class="score-badge" style="background:${scoreToColor(vScore, 0.6)};color:${scoreToTextColor(vScore)}">${vScore != null ? vScore : 'â€”'}</span>
                 </td>
                 <td class="score-cell">
-                    <span class="score-badge" style="background:${scoreToColor(mScore, 0.6)};color:${scoreToTextColor(mScore)}">${mScore != null ? mScore : '—'}</span>
+                    <span class="score-badge" style="background:${scoreToColor(mScore, 0.6)};color:${scoreToTextColor(mScore)}">${mScore != null ? mScore : 'â€”'}</span>
                 </td>
                 <td class="score-cell">
-                    <span class="score-badge" style="background:${scoreToColor(qScore, 0.6)};color:${scoreToTextColor(qScore)}">${qScore != null ? qScore : '—'}</span>
+                    <span class="score-badge" style="background:${scoreToColor(qScore, 0.6)};color:${scoreToTextColor(qScore)}">${qScore != null ? qScore : 'â€”'}</span>
                 </td>
             </tr>
         `;
@@ -210,11 +210,11 @@ function setupSorting() {
             document.querySelectorAll('.screener-table thead th').forEach(h => {
                 h.classList.remove('sorted');
                 const arrow = h.querySelector('.sort-arrow');
-                if (arrow) arrow.textContent = '▲';
+                if (arrow) arrow.textContent = 'â–²';
             });
             th.classList.add('sorted');
             const arrow = th.querySelector('.sort-arrow');
-            if (arrow) arrow.textContent = currentSort.ascending ? '▲' : '▼';
+            if (arrow) arrow.textContent = currentSort.ascending ? 'â–²' : 'â–¼';
 
             renderTable();
         });
@@ -331,7 +331,7 @@ function updateDrawerContent(ticker) {
 
     document.getElementById('drawerTicker').textContent = stock.ticker;
     document.getElementById('drawerCompany').textContent = stock.name;
-    document.getElementById('drawerSector').textContent = `${stock.sector} · ${stock.industry}`;
+    document.getElementById('drawerSector').textContent = `${stock.sector} Â· ${stock.industry}`;
 
     // Composite score ring
     const score = stock.compositeScore ?? 0;
@@ -341,7 +341,7 @@ function updateDrawerContent(ticker) {
     ring.style.strokeDashoffset = circumference - (score / 100) * circumference;
     ring.style.stroke = scoreToColor(score);
 
-    document.getElementById('compositeValue').textContent = stock.compositeScore != null ? stock.compositeScore : '—';
+    document.getElementById('compositeValue').textContent = stock.compositeScore != null ? stock.compositeScore : 'â€”';
     document.getElementById('compositeDesc').textContent =
         stock.compositeScore != null
             ? `Scores better than ${stock.compositeScore}% of all IDX stocks across all weighted factors.`
@@ -350,9 +350,9 @@ function updateDrawerContent(ticker) {
     // Family scores
     const familyScoresDiv = document.getElementById('familyScores');
     const families = [
-        { key: 'valueScore', label: 'Value', color: '#448AFF' },
-        { key: 'momentumScore', label: 'Momentum', color: '#FF6E40' },
-        { key: 'qualityScore', label: 'Quality', color: '#00E676' },
+        { key: 'valueScore', label: 'Value', color: '#8A9FBA' },
+        { key: 'momentumScore', label: 'Momentum', color: '#BA9B7A' },
+        { key: 'qualityScore', label: 'Quality', color: '#D5D98B' },
     ];
 
     familyScoresDiv.innerHTML = families.map(f => {
@@ -363,7 +363,7 @@ function updateDrawerContent(ticker) {
                 <div class="family-score-bar">
                     <div class="family-score-fill" style="width:${val ?? 0}%;background:${f.color};opacity:${val != null ? 0.85 : 0.2}"></div>
                 </div>
-                <span class="family-score-value" style="color:${val != null ? f.color : 'var(--text-muted)'}">${val != null ? val : '—'}</span>
+                <span class="family-score-value" style="color:${val != null ? f.color : 'var(--text-muted)'}">${val != null ? val : 'â€”'}</span>
             </div>
         `;
     }).join('');
@@ -379,15 +379,15 @@ function updateDrawerContent(ticker) {
             <tr>
                 <td class="factor-name">
                     ${f.name}
-                    <span style="color:var(--text-muted);font-size:0.65rem;margin-left:4px">${f.lowerIsBetter ? '(lower ✓)' : '(higher ✓)'}</span>
+                    <span style="color:var(--text-muted);font-size:0.65rem;margin-left:4px">${f.lowerIsBetter ? '(lower âœ“)' : '(higher âœ“)'}</span>
                 </td>
                 <td class="factor-raw">${formatRaw(f.key, raw)}</td>
-                <td class="factor-z" style="color:${z != null ? (z > 0 ? '#00E676' : '#FF5252') : 'var(--text-muted)'}">
-                    ${z != null ? (z >= 0 ? '+' : '') + z.toFixed(2) : '—'}
+                <td class="factor-z" style="color:${z != null ? (z > 0 ? '#D5D98B' : '#BA8A8A') : 'var(--text-muted)'}">
+                    ${z != null ? (z >= 0 ? '+' : '') + z.toFixed(2) : 'â€”'}
                 </td>
                 <td class="factor-pct">
                     <span class="score-badge" style="background:${scoreToColor(pct, 0.6)};color:${scoreToTextColor(pct)};font-size:0.72rem;padding:2px 8px">
-                        ${pct != null ? pct : '—'}
+                        ${pct != null ? pct : 'â€”'}
                     </span>
                 </td>
             </tr>

@@ -1,5 +1,5 @@
-/* ================================================
-   Multi-Factor Equity Screener — Styles
+﻿/* ================================================
+   Multi-Factor Equity Screener â€” Styles
    Matches IDX main site theme (dark + green accent)
    ================================================ */
 
@@ -179,7 +179,7 @@
 
 .slider-icon.value-icon { background: rgba(68, 138, 255, 0.15); }
 .slider-icon.momentum-icon { background: rgba(255, 110, 64, 0.15); }
-.slider-icon.quality-icon { background: rgba(0, 230, 118, 0.15); }
+.slider-icon.quality-icon { background: rgba(213, 217, 139, 0.15); }
 
 .slider-track {
     flex: 1;
@@ -445,17 +445,17 @@
 }
 
 .screener-table tbody tr {
-    border-bottom: 1px solid rgba(0, 230, 118, 0.04);
+    border-bottom: 1px solid rgba(213, 217, 139, 0.04);
     transition: background 0.15s ease;
     cursor: pointer;
 }
 
 .screener-table tbody tr:hover {
-    background: rgba(0, 230, 118, 0.04);
+    background: rgba(213, 217, 139, 0.04);
 }
 
 .screener-table tbody tr.selected {
-    background: rgba(0, 230, 118, 0.08);
+    background: rgba(213, 217, 139, 0.08);
 }
 
 .screener-table tbody td {
@@ -752,7 +752,7 @@
     padding: 10px;
     font-size: 0.78rem;
     color: var(--text-primary);
-    border-bottom: 1px solid rgba(0, 230, 118, 0.04);
+    border-bottom: 1px solid rgba(213, 217, 139, 0.04);
 }
 
 .factor-table .factor-name {
