@@ -105,6 +105,49 @@ while ($listener.IsListening) {
         $response.Close()
         continue
     }
+
+    # Yahoo Finance quoteSummary proxy (for screener fundamentals)
+    if ($path -eq '/api/yahoo-summary') {
+        $symbol = $request.QueryString['symbol']
+        if (-not $symbol) {
+            $response.StatusCode = 400
+            $msg = [System.Text.Encoding]::UTF8.GetBytes('{"error":"Missing symbol parameter"}')
+            $response.ContentType = 'application/json'
+            $response.OutputStream.Write($msg, 0, $msg.Length)
+            $response.Close()
+            continue
+        }
+
+        $modules = $request.QueryString['modules']
+        if (-not $modules) { $modules = 'defaultKeyStatistics,financialData' }
+
+        $yahooUrl = "https://query1.finance.yahoo.com/v10/finance/quoteSummary/${symbol}?modules=${modules}"
+        Write-Host "Summary proxy: $yahooUrl"
+
+        try {
+            [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
+            $webClient = New-Object System.Net.WebClient
+            $webClient.Headers.Add('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
+            $data = $webClient.DownloadString($yahooUrl)
+            $bytes = [System.Text.Encoding]::UTF8.GetBytes($data)
+            $response.ContentType = 'application/json; charset=utf-8'
+            $response.ContentLength64 = $bytes.Length
+            $response.OutputStream.Write($bytes, 0, $bytes.Length)
+            Write-Host "  -> OK ($($bytes.Length) bytes)"
+        }
+        catch {
+            Write-Host "  -> Error: $_"
+            $response.StatusCode = 502
+            $errMsg = $_.Exception.Message -replace '"', '\"'
+            $errBody = [System.Text.Encoding]::UTF8.GetBytes("{`"error`":`"$errMsg`"}")
+            $response.ContentType = 'application/json'
+            $response.OutputStream.Write($errBody, 0, $errBody.Length)
+        }
+
+        $response.Close()
+        continue
+    }
+
     if ($path -eq '/api/idx-docs') {
         $ticker = $request.QueryString['ticker']
         $docType = $request.QueryString['type'] # 'annual' or 'financial'

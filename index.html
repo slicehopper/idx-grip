@@ -56,6 +56,10 @@
                 <button class="quick-btn" data-ticker="UNVR">UNVR</button>
                 <button class="quick-btn" data-ticker="GOTO">GOTO</button>
             </div>
+            <div class="quick-picks" style="margin-top:6px;">
+                <span class="quick-label">Tools:</span>
+                <a href="screener.html" class="quick-btn" style="text-decoration:none;">📊 Equity Screener</a>
+            </div>
         </div>
 
         <!-- IDX Market Heatmap -->
@@ -141,11 +145,12 @@
                 <button class="zoom-btn" id="zoomOutBtn" title="Zoom Out">−</button>
                 <button class="zoom-btn zoom-reset" id="zoomResetBtn" title="Reset Zoom">↺</button>
             </div>
-            <div class="chart-tooltip" id="chartTooltip">
+            <div class="chart-tooltip" id="chartTooltip" style="display:none;">
                 <div class="tooltip-date" id="tooltipDate"></div>
                 <div class="tooltip-price" id="tooltipPrice"></div>
                 <div class="tooltip-change" id="tooltipChange"></div>
             </div>
+            <div class="y-axis-price-tag" id="yAxisPriceTag"></div>
             <div class="event-popup" id="eventPopup">
                 <div class="event-popup-arrow"></div>
                 <div class="event-popup-header">

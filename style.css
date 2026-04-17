@@ -482,6 +482,63 @@ body {
 }
 .chart-tooltip.visible { opacity: 1; transform: translateY(0); }
 
+/* ---- Y-Axis Price Tag (on the right scale) ---- */
+.y-axis-price-tag {
+    position: absolute;
+    right: 0;
+    pointer-events: none;
+    z-index: 30;
+    background: rgba(0, 230, 118, 0.15);
+    border: 1px solid rgba(0, 230, 118, 0.5);
+    border-radius: 6px;
+    padding: 3px 12px 3px 10px;
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #00E676;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.12s ease, top 0.06s linear;
+    transform: translateY(-50%);
+    letter-spacing: 0.02em;
+    text-shadow: 0 0 8px rgba(0, 230, 118, 0.3);
+}
+
+.y-axis-price-tag.visible {
+    opacity: 1;
+}
+
+.y-axis-price-tag::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 8px;
+    height: 8px;
+    background: rgba(0, 230, 118, 0.15);
+    border-left: 1px solid rgba(0, 230, 118, 0.5);
+    border-bottom: 1px solid rgba(0, 230, 118, 0.5);
+}
+
+/* Crosshair line drawn by canvas plugin — styles for overlay */
+.chart-crosshair-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    pointer-events: none;
+    z-index: 4;
+    border-top: 1px dashed rgba(0, 230, 118, 0.25);
+    opacity: 0;
+    transition: opacity 0.12s ease, top 0.06s linear;
+    transform: translateY(-0.5px);
+}
+
+.chart-crosshair-line.visible {
+    opacity: 1;
+}
+
 .tooltip-date {
     font-size: 0.7rem; color: var(--text-muted);
     font-weight: 600; text-transform: uppercase;

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Factor Equity Screener — IDX Stock Rankings</title>
+    <meta name="description" content="Rank IDX stocks using a multi-factor model combining Value, Momentum, and Quality factors with interactive weight sliders.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="screener.css">
+</head>
+<body>
+    <!-- Animated topographical contour background -->
+    <div class="topo-bg">
+        <svg id="topoSvg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+
+    <!-- Floating particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main Container -->
+    <div class="screener-page">
+        <!-- Navigation -->
+        <nav class="screener-nav">
+            <a href="index.html" class="nav-back" id="navBack">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+                </svg>
+                Back to Timeline
+            </a>
+            <div class="nav-links">
+                <a href="screener.html" class="nav-link active">Screener</a>
+            </div>
+        </nav>
+
+        <!-- Header -->
+        <header class="screener-header">
+            <h1>Multi-Factor Equity Screener</h1>
+            <p>Rank all IDX stocks by composite score across Value, Momentum, and Quality factors using Z-score normalization and percentile ranking.</p>
+        </header>
+
+        <!-- Controls Panel -->
+        <div class="screener-controls" id="screenerControls">
+            <!-- Weight Sliders -->
+            <div class="control-card">
+                <div class="control-card-title">Factor Weights</div>
+                <div class="weight-sliders">
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span class="slider-icon value-icon">💎</span>
+                            Value
+                        </div>
+                        <div class="slider-track">
+                            <input type="range" id="weightValue" min="0" max="100" value="33">
+                        </div>
+                        <span class="slider-value" id="weightValueDisplay">33%</span>
+                    </div>
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span class="slider-icon momentum-icon">🚀</span>
+                            Momentum
+                        </div>
+                        <div class="slider-track">
+                            <input type="range" id="weightMomentum" min="0" max="100" value="33">
+                        </div>
+                        <span class="slider-value" id="weightMomentumDisplay">33%</span>
+                    </div>
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span class="slider-icon quality-icon">✅</span>
+                            Quality
+                        </div>
+                        <div class="slider-track">
+                            <input type="range" id="weightQuality" min="0" max="100" value="34">
+                        </div>
+                        <span class="slider-value" id="weightQualityDisplay">34%</span>
+                    </div>
+                    <button class="apply-weights-btn" id="applyWeightsBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        Apply Weights
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="control-card">
+                <div class="control-card-title">Filters</div>
+                <div class="filter-group">
+                    <div class="filter-item">
+                        <label class="filter-label" for="filterSector">Sector</label>
+                        <select class="filter-select" id="filterSector">
+                            <option value="all">All Sectors</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label class="filter-label" for="filterMinScore">Min Score</label>
+                        <input class="filter-input" id="filterMinScore" type="number" min="0" max="100" value="0" placeholder="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="screener-loading" id="screenerLoading">
+            <div class="loader-ring" style="width:40px;height:40px;border-width:2.5px;"></div>
+            <div class="screener-progress-bar">
+                <div class="screener-progress-fill" id="progressFill" style="width:0%"></div>
+            </div>
+            <div class="screener-progress-text" id="progressText">Initializing screener...</div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="screener-table-wrapper" id="tableWrapper" style="display:none;">
+            <div class="screener-table-header">
+                <span class="screener-table-title">Ranked IDX Stocks</span>
+                <span class="screener-stock-count" id="stockCount">—</span>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="screener-table" id="screenerTable">
+                    <thead>
+                        <tr>
+                            <th data-sort="rank" class="sorted">Rank <span class="sort-arrow">▲</span></th>
+                            <th data-sort="ticker">Ticker <span class="sort-arrow">▲</span></th>
+                            <th data-sort="name">Company <span class="sort-arrow">▲</span></th>
+                            <th data-sort="sector">Sector <span class="sort-arrow">▲</span></th>
+                            <th data-sort="compositeScore">Composite <span class="sort-arrow">▼</span></th>
+                            <th data-sort="valueScore">Value <span class="sort-arrow">▼</span></th>
+                            <th data-sort="momentumScore">Momentum <span class="sort-arrow">▼</span></th>
+                            <th data-sort="qualityScore">Quality <span class="sort-arrow">▼</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="screener-footer">
+            <p>
+                Powered by Yahoo Finance data · Z-score normalization with Winsorized outliers
+            </p>
+        </footer>
+    </div>
+
+    <!-- Detail Drawer Overlay -->
+    <div class="detail-drawer-overlay" id="drawerOverlay"></div>
+
+    <!-- Detail Drawer -->
+    <div class="detail-drawer" id="detailDrawer">
+        <button class="drawer-close" id="drawerClose">✕</button>
+        <div class="drawer-ticker" id="drawerTicker">—</div>
+        <div class="drawer-company" id="drawerCompany">—</div>
+        <div class="drawer-sector" id="drawerSector">—</div>
+
+        <!-- Composite Score -->
+        <div class="drawer-composite">
+            <div class="composite-score-ring">
+                <svg viewBox="0 0 36 36">
+                    <circle class="ring-bg" cx="18" cy="18" r="15.91"/>
+                    <circle class="ring-fill" id="compositeRing" cx="18" cy="18" r="15.91"
+                        stroke-dasharray="100 100" stroke-dashoffset="100"/>
+                </svg>
+                <div class="composite-score-value" id="compositeValue">—</div>
+            </div>
+            <div class="composite-info">
+                <div class="composite-label">Composite Score</div>
+                <div class="composite-desc" id="compositeDesc">—</div>
+            </div>
+        </div>
+
+        <!-- Family Scores -->
+        <div class="drawer-section-title">Family Scores</div>
+        <div class="family-scores" id="familyScores"></div>
+
+        <!-- Factor Breakdown -->
+        <div class="drawer-section-title">Factor Breakdown</div>
+        <table class="factor-table" id="factorTable">
+            <thead>
+                <tr>
+                    <th>Factor</th>
+                    <th style="text-align:right">Raw</th>
+                    <th style="text-align:right">Z-Score</th>
+                    <th style="text-align:right">Percentile</th>
+                </tr>
+            </thead>
+            <tbody id="factorTableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Scripts -->
+    <script src="heatmap-data.js"></script>
+    <script src="screener-data.js"></script>
+    <script src="screener.js"></script>
+</body>
+</html>

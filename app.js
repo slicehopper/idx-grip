@@ -301,6 +301,16 @@ function buildChart(priceData) {
     gradient.addColorStop(0.5, 'rgba(0, 230, 118, 0.06)');
     gradient.addColorStop(1, 'rgba(0, 230, 118, 0)');
 
+    // Create crosshair line element if not already present
+    const wrapper = document.getElementById('chartWrapper');
+    let crosshairLine = document.getElementById('chartCrosshairLine');
+    if (!crosshairLine) {
+        crosshairLine = document.createElement('div');
+        crosshairLine.className = 'chart-crosshair-line';
+        crosshairLine.id = 'chartCrosshairLine';
+        wrapper.appendChild(crosshairLine);
+    }
+
     chart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -365,14 +375,13 @@ function buildChart(priceData) {
                     border: { display: false },
                 },
             },
-            onHover: handleChartHover,
         }
     });
 
-    // Hide tooltip on mouse leave
-    document.getElementById('chartWrapper').onmouseleave = () => {
-        document.getElementById('chartTooltip').classList.remove('visible');
-    };
+    // --- Y-axis price tag + crosshair on raw mouse movement ---
+    const canvas = chart.canvas;
+    canvas.addEventListener('mousemove', handleCanvasMouseMove);
+    wrapper.addEventListener('mouseleave', handleCanvasMouseLeave);
 }
 
 // =============================================
@@ -394,54 +403,64 @@ function setupZoomControls() {
 }
 
 // =============================================
-// HOVER TOOLTIP
+// Y-AXIS PRICE TAG + CROSSHAIR
 // =============================================
-function handleChartHover(evt) {
-    const tooltip = document.getElementById('chartTooltip');
-    if (!chart || !evt.native || !currentStock) {
-        tooltip.classList.remove('visible');
+function handleCanvasMouseMove(evt) {
+    if (!chart) return;
+    const yScale = chart.scales.y;
+    const chartArea = chart.chartArea;
+    const canvas = chart.canvas;
+
+    // Get cursor position relative to the canvas
+    const rect = canvas.getBoundingClientRect();
+    const mouseY = evt.clientY - rect.top;
+
+    // Only show if cursor is within the chart area vertically
+    if (mouseY < chartArea.top || mouseY > chartArea.bottom) {
+        hideYAxisPriceTag();
         return;
     }
 
-    const points = chart.getElementsAtEventForMode(evt.native, 'index', { intersect: false }, false);
-    if (points.length === 0) {
-        tooltip.classList.remove('visible');
+    // Convert pixel position to price value
+    const price = yScale.getValueForPixel(mouseY);
+    if (price == null || isNaN(price)) {
+        hideYAxisPriceTag();
         return;
     }
 
-    const idx = points[0].index;
-    const priceData = currentStock.priceData;
-    const price = priceData[idx].close;
-    const date = new Date(priceData[idx].date);
-    const prevPrice = idx > 0 ? priceData[idx - 1].close : price;
-    const change = ((price - prevPrice) / prevPrice * 100).toFixed(1);
+    // Position the price tag
+    const priceTag = document.getElementById('yAxisPriceTag');
+    const crosshairLine = document.getElementById('chartCrosshairLine');
+    const canvasOffsetY = canvas.offsetTop;
 
-    document.getElementById('tooltipDate').textContent =
-        date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    document.getElementById('tooltipPrice').textContent =
-        'IDR ' + price.toLocaleString();
+    // y position relative to the wrapper
+    const yPos = mouseY + canvasOffsetY;
 
-    const tooltipChange = document.getElementById('tooltipChange');
-    if (idx > 0) {
-        const sign = change >= 0 ? '+' : '';
-        tooltipChange.textContent = `${sign}${change}% from prev`;
-        tooltipChange.className = 'tooltip-change ' + (change >= 0 ? 'positive' : 'negative');
-    } else {
-        tooltipChange.textContent = '';
+    priceTag.textContent = 'IDR ' + Math.round(price).toLocaleString();
+    priceTag.style.top = yPos + 'px';
+    priceTag.classList.add('visible');
+
+    // Position the crosshair line
+    if (crosshairLine) {
+        // Constrain line to chart area
+        const canvasEl = chart.canvas;
+        crosshairLine.style.top = yPos + 'px';
+        crosshairLine.style.left = (chartArea.left + canvasEl.offsetLeft) + 'px';
+        crosshairLine.style.right = (canvasEl.parentElement.clientWidth - chartArea.right - canvasEl.offsetLeft) + 'px';
+        crosshairLine.style.width = 'auto';
+        crosshairLine.classList.add('visible');
     }
+}
 
-    const meta = chart.getDatasetMeta(0);
-    const point = meta.data[idx];
-    const wrapperRect = document.getElementById('chartWrapper').getBoundingClientRect();
+function handleCanvasMouseLeave() {
+    hideYAxisPriceTag();
+}
 
-    let left = point.x + 20;
-    let top = point.y - 30;
-    if (left + 160 > wrapperRect.width) left = point.x - 170;
-    if (top < 10) top = 10;
-
-    tooltip.style.left = left + 'px';
-    tooltip.style.top = top + 'px';
-    tooltip.classList.add('visible');
+function hideYAxisPriceTag() {
+    const priceTag = document.getElementById('yAxisPriceTag');
+    const crosshairLine = document.getElementById('chartCrosshairLine');
+    if (priceTag) priceTag.classList.remove('visible');
+    if (crosshairLine) crosshairLine.classList.remove('visible');
 }
 
 // =============================================
