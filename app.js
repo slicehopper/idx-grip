@@ -1,4 +1,4 @@
-﻿/* ================================================
+/* ================================================
    IDX Stock Timeline â€” Application Logic
    Dynamically loads any IDX stock
    ================================================ */
@@ -18,7 +18,7 @@ const categoryColors = {
     acquisition: '#448AFF',
     milestone: '#FF5252',
     dividend: '#E040FB',
-    high_low: '#D5D98B',
+    high_low: '#FF5C00',
     big_move: '#FF6E40',
 };
 
@@ -89,7 +89,7 @@ function generateTopography() {
             d += ` L ${x} ${y}`;
         }
         const opacity = 0.15 + Math.random() * 0.35;
-        paths += `<path d="${d}" fill="none" stroke="var(--accent, #D5D98B)" stroke-width="1" opacity="${opacity}"/>`;
+        paths += `<path d="${d}" fill="none" stroke="var(--accent, #FF5C00)" stroke-width="1" opacity="${opacity}"/>`;
     }
     svg.innerHTML = paths;
 }
@@ -297,9 +297,9 @@ function buildChart(priceData) {
     // Gradient fill
     const canvasHeight = ctx.canvas.clientHeight || 400;
     const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
-    gradient.addColorStop(0, 'rgba(213, 217, 139, 0.25)');
-    gradient.addColorStop(0.5, 'rgba(213, 217, 139, 0.06)');
-    gradient.addColorStop(1, 'rgba(213, 217, 139, 0)');
+    gradient.addColorStop(0, 'rgba(255, 92, 0, 0.25)');
+    gradient.addColorStop(0.5, 'rgba(255, 92, 0, 0.06)');
+    gradient.addColorStop(1, 'rgba(255, 92, 0, 0)');
 
     // Create crosshair line element if not already present
     const wrapper = document.getElementById('chartWrapper');
@@ -318,15 +318,15 @@ function buildChart(priceData) {
             datasets: [{
                 label: 'IDR',
                 data: prices,
-                borderColor: '#D5D98B',
+                borderColor: '#FF5C00',
                 borderWidth: 2.5,
                 backgroundColor: gradient,
                 fill: true,
                 tension: 0.3,
                 pointRadius: 0,
                 pointHoverRadius: 6,
-                pointHoverBackgroundColor: '#D5D98B',
-                pointHoverBorderColor: '#0a0f0d',
+                pointHoverBackgroundColor: '#FF5C00',
+                pointHoverBorderColor: '#F2EEE1',
                 pointHoverBorderWidth: 3,
             }]
         },
@@ -689,10 +689,10 @@ function initTradingView(ticker) {
         symbol: symbol,
         interval: 'D',
         timezone: 'Asia/Jakarta',
-        theme: 'dark',
+        theme: 'light',
         style: '1',
         locale: 'en',
-        toolbar_bg: '#0a0f0d',
+        toolbar_bg: '#F2EEE1',
         enable_publishing: false,
         allow_symbol_change: false,
         hide_top_toolbar: false,
@@ -700,19 +700,19 @@ function initTradingView(ticker) {
         save_image: false,
         width: '100%',
         height: 500,
-        backgroundColor: 'rgba(10, 15, 13, 1)',
-        gridColor: 'rgba(213, 217, 139, 0.05)',
+        backgroundColor: 'rgba(242, 238, 225, 1)',
+        gridColor: 'rgba(0, 0, 0, 0.05)',
         studies: ['MASimple@tv-basicstudies'],
         overrides: {
-            'mainSeriesProperties.candleStyle.upColor': '#D5D98B',
-            'mainSeriesProperties.candleStyle.downColor': '#FF5252',
-            'mainSeriesProperties.candleStyle.borderUpColor': '#D5D98B',
-            'mainSeriesProperties.candleStyle.borderDownColor': '#FF5252',
-            'mainSeriesProperties.candleStyle.wickUpColor': '#D5D98B',
-            'mainSeriesProperties.candleStyle.wickDownColor': '#FF5252',
-            'paneProperties.background': '#0a0f0d',
-            'paneProperties.vertGridProperties.color': 'rgba(213, 217, 139, 0.05)',
-            'paneProperties.horzGridProperties.color': 'rgba(213, 217, 139, 0.05)',
+            'mainSeriesProperties.candleStyle.upColor': '#2D8C4E',
+            'mainSeriesProperties.candleStyle.downColor': '#D44040',
+            'mainSeriesProperties.candleStyle.borderUpColor': '#2D8C4E',
+            'mainSeriesProperties.candleStyle.borderDownColor': '#D44040',
+            'mainSeriesProperties.candleStyle.wickUpColor': '#2D8C4E',
+            'mainSeriesProperties.candleStyle.wickDownColor': '#D44040',
+            'paneProperties.background': '#F2EEE1',
+            'paneProperties.vertGridProperties.color': 'rgba(0, 0, 0, 0.05)',
+            'paneProperties.horzGridProperties.color': 'rgba(0, 0, 0, 0.05)',
         },
     });
 }

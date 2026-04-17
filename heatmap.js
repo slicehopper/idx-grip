@@ -1,4 +1,4 @@
-﻿/* ================================================
+/* ================================================
    IDX Market Heatmap â€” Treemap Renderer
    Row-based treemap using absolute positioning
    ================================================ */
@@ -224,7 +224,7 @@ function ensureTooltip() {
 function showHeatmapTooltip(e, stock, tile) {
     const tt = ensureTooltip();
     const sign = stock.changePercent >= 0 ? '+' : '';
-    const changeColor = stock.changePercent >= 0 ? '#D5D98B' : '#BA8A8A';
+    const changeColor = stock.changePercent >= 0 ? '#2D8C4E' : '#D44040';
 
     const mcapStr = stock.marketCap > 1e12
         ? (stock.marketCap / 1e12).toFixed(1) + 'T'

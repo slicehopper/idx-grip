@@ -1,7 +1,7 @@
-﻿/* ================================================
+/* ================================================
    IDX Stock Timeline â€” Global Styles
-   Brand: Khaki/Sage (#D5D98B/#B5BA8A) + Navy Dark Theme + Dark Theme
-   Inspired by topographical contour lines
+   Brand: Cream (#F2EEE1) + Black + Orange (#FF5C00) Light Theme
+   Inspired by firstinternet.co.uk
    ================================================ */
 
 *, *::before, *::after {
@@ -11,31 +11,31 @@
 }
 
 :root {
-    --accent: #D5D98B;
-    --accent-dark: #B5BA8A;
-    --accent-deep: #9A9B7A;
-    --accent-glow: rgba(213, 217, 139, 0.25);
-    --accent-subtle: rgba(213, 217, 139, 0.08);
+    --accent: #FF5C00;
+    --accent-dark: #E05200;
+    --accent-deep: #C44800;
+    --accent-glow: rgba(255, 92, 0, 0.2);
+    --accent-subtle: rgba(255, 92, 0, 0.08);
 
-    --color-earnings: #D5D98B;
-    --color-acquisition: #8A9FBA;
-    --color-milestone: #BA8A8A;
-    --color-dividend: #B5BA8A;
-    --color-high-low: #D5D98B;
-    --color-big-move: #BA9B7A;
+    --color-earnings: #E8A838;
+    --color-acquisition: #4A8FCC;
+    --color-milestone: #D44040;
+    --color-dividend: #2D8C4E;
+    --color-high-low: #FF5C00;
+    --color-big-move: #C77D3A;
 
-    --bg-primary: #0C1621;
-    --bg-secondary: #111D2A;
-    --bg-card: rgba(17, 29, 42, 0.85);
-    --bg-glass: rgba(17, 29, 42, 0.6);
-    --text-primary: #E2E4D4;
-    --text-secondary: #B5BA8A;
-    --text-muted: #6B7255;
-    --border-color: rgba(213, 217, 139, 0.12);
-    --border-glow: rgba(213, 217, 139, 0.3);
+    --bg-primary: #F2EEE1;
+    --bg-secondary: #E8E4D6;
+    --bg-card: rgba(232, 228, 214, 0.85);
+    --bg-glass: rgba(232, 228, 214, 0.6);
+    --text-primary: #1A1A1A;
+    --text-secondary: #3A3A3A;
+    --text-muted: #6B6B6B;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --border-glow: rgba(255, 92, 0, 0.25);
 
-    --font-display: 'Outfit', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --font-display: 'Bricolage Grotesque', 'Outfit', sans-serif;
+    --font-body: 'Geist', 'Inter', sans-serif;
     --container-pad: clamp(16px, 3vw, 48px);
 }
 
@@ -488,20 +488,20 @@ body {
     right: 0;
     pointer-events: none;
     z-index: 30;
-    background: rgba(213, 217, 139, 0.15);
-    border: 1px solid rgba(213, 217, 139, 0.5);
+    background: rgba(255, 92, 0, 0.15);
+    border: 1px solid rgba(255, 92, 0, 0.5);
     border-radius: 6px;
     padding: 3px 12px 3px 10px;
     font-family: var(--font-display);
     font-size: 0.78rem;
     font-weight: 700;
-    color: #D5D98B;
+    color: #FF5C00;
     white-space: nowrap;
     opacity: 0;
     transition: opacity 0.12s ease, top 0.06s linear;
     transform: translateY(-50%);
     letter-spacing: 0.02em;
-    text-shadow: 0 0 8px rgba(213, 217, 139, 0.3);
+    text-shadow: 0 0 8px rgba(255, 92, 0, 0.3);
 }
 
 .y-axis-price-tag.visible {
@@ -516,12 +516,12 @@ body {
     transform: translateY(-50%) rotate(45deg);
     width: 8px;
     height: 8px;
-    background: rgba(213, 217, 139, 0.15);
-    border-left: 1px solid rgba(213, 217, 139, 0.5);
-    border-bottom: 1px solid rgba(213, 217, 139, 0.5);
+    background: rgba(255, 92, 0, 0.15);
+    border-left: 1px solid rgba(255, 92, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 92, 0, 0.5);
 }
 
-/* Crosshair line drawn by canvas plugin â€” styles for overlay */
+/* Crosshair line drawn by canvas plugin Ã¢â‚¬â€ styles for overlay */
 .chart-crosshair-line {
     position: absolute;
     left: 0;
@@ -529,7 +529,7 @@ body {
     height: 1px;
     pointer-events: none;
     z-index: 4;
-    border-top: 1px dashed rgba(213, 217, 139, 0.25);
+    border-top: 1px dashed rgba(255, 92, 0, 0.25);
     opacity: 0;
     transition: opacity 0.12s ease, top 0.06s linear;
     transform: translateY(-0.5px);
@@ -549,7 +549,7 @@ body {
     font-size: 1.2rem; font-weight: 700; color: var(--accent);
 }
 .tooltip-change { font-size: 0.75rem; font-weight: 500; margin-top: 2px; }
-.tooltip-change.positive { color: #D5D98B; }
+.tooltip-change.positive { color: #FF5C00; }
 .tooltip-change.negative { color: #FF5252; }
 
 /* ---- Event Popup ---- */
@@ -734,7 +734,7 @@ body {
 }
 
 .doc-card.doc-pdf {
-    border-color: rgba(213, 217, 139, 0.2);
+    border-color: rgba(255, 92, 0, 0.2);
 }
 
 .doc-card.doc-pdf .doc-card-link {
@@ -786,9 +786,9 @@ body {
 }
 
 .hm-live-badge {
-    color: #D5D98B !important;
-    background: rgba(213, 217, 139, 0.1) !important;
-    border-color: rgba(213, 217, 139, 0.25) !important;
+    color: #FF5C00 !important;
+    background: rgba(255, 92, 0, 0.1) !important;
+    border-color: rgba(255, 92, 0, 0.25) !important;
     animation: livePulse 2s ease-in-out infinite;
 }
 
